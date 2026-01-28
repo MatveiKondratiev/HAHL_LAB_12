@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  hahl-fastapi:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    container_name: hahl-fastapi
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - hahl-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - hahl-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - hahl-network
+
+networks:
+  hahl-network:
+    driver: bridge
+
