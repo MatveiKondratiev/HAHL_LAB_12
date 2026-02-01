@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "lab78-app"
+    static_configs:
+      - targets: ["app:8000"]
+
+  - job_name: "postgres-primary"
+    static_configs:
+      - targets: ["postgres-exporter-primary:9187"]
+
+  - job_name: "postgres-standby"
+    static_configs:
+      - targets: ["postgres-exporter-standby:9187"]
+
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
